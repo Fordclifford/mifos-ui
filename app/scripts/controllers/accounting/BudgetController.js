@@ -1,8 +1,8 @@
 (function (module) {
     mifosX.controllers = _.extend(module, {
-        BudgetController: function ($uibModal,routeParams,route,scope, resourceFactory, location, dateFilter) {
+        BudgetController: function ($uibModal, routeParams, route, scope, resourceFactory, location, dateFilter) {
 
-            scope.formData = {disabled: false,};
+            scope.formData = {disabled: false};
 //            scope.formData.crAccounts = [{}];
 //            scope.formData.dbAccounts = [{}];
             scope.first = {};
@@ -31,14 +31,49 @@
                 scope.expenseGlAccounts = data;
             });
 
-//            resourceFactory.paymentTypeResource.getAll( function (data) {
-//                scope.paymentTypes = data;
-//            });
+            resourceFactory.budgetResource.get({budgetAccountId: routeParams.id, template: 'true'}, function (data) {
+                scope.budgetdata = data;
+                scope.budgetAccountId = data.id;
 
-//            resourceFactory.currencyConfigResource.get({fields: 'selectedCurrencyOptions'}, function (data) {
-//                scope.currencyOptions = data.selectedCurrencyOptions;
-//                scope.formData.currencyCode = scope.currencyOptions[0].code;
-//            });
+                var toDate = dateFilter(data.toDate, scope.df);
+                var createDate = dateFilter(data.createDate, scope.df);
+                var fromDate = dateFilter(data.fromDate, scope.df);
+          
+                scope.updateData = {
+                    name: data.name,
+                    locale: scope.optlang.code,
+                    dateFormat: scope.df,
+                    description: data.description,
+                    fromDate: new Date(fromDate),
+                    toDate: new Date(toDate),
+                    createDate: new Date(createDate),
+                    year: data.year,
+                    disabled: data.disabled,
+                    liabilityAccountId: data.liabilityAccountId,
+                    assetAccountId: data.assetAccountId,
+                    expenseAccountId: data.expenseAccountId,
+                    amount: data.amount
+                };
+                //   scope.changeType() ;
+            });
+
+
+            scope.update = function () {
+                
+                if(scope.updateData.fromDate){
+                    scope.updateData.fromDate = dateFilter(scope.updateData.fromDate,  scope.df);
+                }
+                 if(scope.updateData.toDate){
+                    scope.updateData.toDate = dateFilter(scope.updateData.toDate,  scope.df);
+                }
+                 if(scope.updateData.createDate){
+                    scope.updateData.createDate = dateFilter(scope.updateData.createDate,  scope.df);
+                }
+                
+                resourceFactory.budgetResource.update({'budgetAccountId': routeParams.id}, this.updateData, function (data) {
+                    location.path('/viewbudget/' + data.resourceId);
+                });
+            };
 
             scope.submit = function () {
 
@@ -79,13 +114,13 @@
 //                budget.expenseAccountId = scope.formData.expenseAccountId;
 //                budget.amount = scope.fromData.amount;
 //              
-               
+
                 resourceFactory.budgetResource.save(this.formData, function (data) {
                     location.path('/viewbudget/' + data.resourceId);
                 });
             }
-            
-            
+
+
             scope.budgetdatas = [];
             scope.isTreeView = false;
 
@@ -125,18 +160,18 @@
             scope.ChartsPerPage = 15;
             resourceFactory.budgetResource.getAllBudget(function (data) {
                 scope.budgetdatas = scope.deepCopy(data);
-                  //scope.budgetdatas = data;
-                
-    });
-       
+                //scope.budgetdatas = data;
+
+            });
+
             resourceFactory.budgetResource.get({budgetAccountId: routeParams.id, template: 'true'}, function (data) {
 
 
                 scope.bdata = data;
-                console.log(data)
+               // console.log(data)
             });
 
-            scope.deleteGBudget = function () {
+            scope.deleteBudget = function () {
                 $uibModal.open({
                     templateUrl: 'deletebudget.html',
                     controller: GlAccDeleteCtrl
@@ -158,11 +193,11 @@
                     route.reload();
                 });
             };
-     
-		
+
+
         }
     });
-    mifosX.ng.application.controller('BudgetController', ['$uibModal','$routeParams','$route','$scope', 'ResourceFactory', '$location', 'dateFilter', mifosX.controllers.BudgetController]).run(function ($log) {
+    mifosX.ng.application.controller('BudgetController', ['$uibModal', '$routeParams', '$route', '$scope', 'ResourceFactory', '$location', 'dateFilter', mifosX.controllers.BudgetController]).run(function ($log) {
         $log.info("BudgetController initialized");
     });
 }(mifosX.controllers || {}));

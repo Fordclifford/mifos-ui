@@ -133,6 +133,7 @@ define(['Q', 'underscore', 'mifosX'], function (Q) {
             'accounting/JournalEntryController',
             'accounting/BudgetController',
             'accounting/ViewBudgetController',
+            'accounting/EditBudgetController',
             'accounting/SearchTransactionController',
             'accounting/AccountingClosureController',
             'accounting/ViewAccountingClosureController',

@@ -1,90 +1,130 @@
-<div ng-controller="AccEditGLAccountController" class="col-md-12">
+<div ng-controller="BudgetController" class="col-md-12">
     <div>
         <ul class="breadcrumb">
-            <li><a href="#/accounting">{{'label.anchor.accounting' | translate}}</a></li>
-            <li><a href="#/accounting_coa">{{'label.anchor.coa' | translate}}</a></li>
-            <li><a href="#/viewglaccount/{{glAccountId}}">{{formData.name}}</a></li>
-            <li class="active">{{'label.anchor.editglaccount' | translate}}</li>
+            <li><a href="#/accounting">{{'label.anchor.accounting'| translate}}</a></li>
+            <li><a href="#/budget">Budget</a></li>
+            <li><a href="#/viewbudget/{{budgetAccountId}}">{{updateData.name}}</a></li>
+            <li class="active">Edit Budget</li>
         </ul>
+    
     </div>
     <api-validate></api-validate>
-    <form name="editglaccountingform" novalidate="" class="form-horizontal well" rc-submit="submit()">
+    <form name="editbudgetform" novalidate="" class="form-horizontal well" rc-submit="update()">
         <fieldset>
-            <legend>{{'label.heading.editglaccount' | translate}}</legend>
-			<div class="form-group">
-				<label class="control-label col-sm-2 " for="type">{{'label.input.accounttype' | translate}}
-				</label>
-				<div class="col-sm-2">
-					<select id="type" ng-model="formData.type" class="form-control"
-							ng-options="accountType.id as accountType.code | translate for accountType in accountTypes" value="{{accountType.id}}"
-							ng-change="changeType()" required="required">
-					</select>
-				</div>
-				<label class="control-label col-sm-4" for="parentId">{{'label.input.parent' | translate}}</label>
-				<div class="col-sm-2">
-					<select id="parentId" ng-model="formData.parentId" class="form-control"
-							ng-options="headerType.id as headerType.name for headerType in headerTypes"
-							value="{{headerType.id}}">
-						<option value="">{{'label.selectparent' | translate}}</option>
-					</select>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-sm-2 ">{{'label.input.glcode' | translate}}<span
-						class="required">*</span></label>
-				<div class="col-sm-2">
-					<input type="text" id="glCode" name="glCode" ng-autofocus="true" ng-model="formData.glCode" class="form-control" required
-						   late-Validate/>
-				</div>
-				<div class="col-sm-2 ">
-					<form-validate valattributeform="createglaccountingform" valattribute="glCode"/>
-				</div>
-				<label class="control-label col-sm-2" >{{'label.input.accountname' | translate}}<span
-						class="required">*</span></label>
-				<div class="col-sm-2">
-					<input id="name" type="text"  name="name"
-						   ng-model="formData.name" class="form-control" required late-Validate/>
-				</div>
-				<div class="col-sm-2">
-					<form-validate valattributeform="createglaccountingform" valattribute="name"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-sm-2 " for="usage">{{'label.input.accountusage' | translate}}</label>
+            <legend>Edit Budget</legend>
+      <div class="form-group">
+                <label class="control-label col-sm-2 " for="liabilityAccountId">Supplier/Liability Account
+                </label>
+                <div class="col-sm-2">
+                    <select id="liabilityAccountId" ng-model="updateData.liabilityAccountId" class="form-control"
+                            ng-options="liabilityGlAccount.id as liabilityGlAccount.name |    translate for liabilityGlAccount in liabilityGlAccounts" value="{{liabilityGlAccount.id}}"
+                            required="required">
+                        <option value="">Select Account</option>
+                    </select>
+                </div>
+                <label class="control-label col-sm-4" for="expenseAccountId">Expense Account</label>
+                <div class="col-sm-2">
+                    <select id="expenseAccountId" ng-model="updateData.expenseAccountId" class="form-control"
+                            ng-options="expenseGlAccount.id as expenseGlAccount.name for expenseGlAccount in expenseGlAccounts"
+                            value="{{expenseGlAccount.id}}">
+                        <option value="">Select Account</option>
+                    </select>
+                </div>
 
-				<div class="col-sm-2">
-					<select id="usage" ng-model="formData.usage" class="form-control">
-						<option ng-repeat="usageType in usageTypes" value="{{usageType.id}}">{{''+usageType.code+'' | translate}}</option>
-					</select>
-				</div>
-				<label class="control-label col-sm-4 " for="tagId">{{'label.input.tag' | translate}}</label>
-				<div class="col-sm-2">
-					<select id="tagId" ng-model="formData.tagId" class="form-control"
-							ng-options="type.id as type.name for type in types" value="{{type.id}}">
-						<option value="">{{'label.selecttag' | translate}}</option>
-					</select>          </div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="manualEntriesAllowed">{{'label.input.manualentriesallowed' |
-					translate}}</label>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="assetAccountId">Source Account</label>
+                <div class="col-sm-2">
+                    <select id="assetAccountId" ng-model="updateData.assetAccountId" class="form-control"
+                            ng-options="assetGlAccount.id as assetGlAccount.name for assetGlAccount in assetGlAccounts"
+                            value="{{assetGlAccount.id}}">
+                        <option value="">Select Account</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
 
-				<div class="col-sm-3">
-					<label class="checkbox">
-						<input id="manualEntriesAllowed" type="checkbox" ng-model="formData.manualEntriesAllowed">
-					</label>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="description">{{'label.input.description' |
-			        translate}}</label>
-			
-			    <div class="col-sm-8">
-			        <textarea id="description" name="description" ng-model="formData.description" rows="8" class="form-control" cols=""></textarea>
-			    </div>
-			</div>
+                </div>
+                <label class="control-label col-sm-2" >{{'label.input.accountname'| translate}}<span
+                        class="required">*</span></label>
+                <div class="col-sm-2">
+                    <input id="name" type="text"  name="name"
+                           ng-model="updateData.name" class="form-control" required late-Validate/>
+                </div>
+                <div class="col-sm-2">
+                    <form-validate valattributeform="editbudgetform" valattribute="name"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 " for="amount">Amount</label>
+
+                <div class="col-sm-2">
+                    <input id="amount" type="text"  name="amount"
+                           ng-model="updateData.amount" class="form-control" required late-Validate/>
+                </div>
+                <div class="col-sm-2">
+                    <form-validate valattributeform="editbudgetform" valattribute="amount"/>
+                </div>
+                <label class="control-label col-sm-2 " for="Create Date">Submitted On</label>
+
+                <div class="col-sm-2">
+                    <input id="createDate" type="text" is-open="opened" min="'2000-01-01'" max="restrictDate" datepicker-pop="dd MMMM yyyy" name="createDate"
+                           ng-model="updateData.createDate" class="form-control" required late-Validate/>
+                </div>
+                <div class="col-sm-2">
+                    <form-validate valattributeform="editbudgetform" valattribute="createDate"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2 " for="fromDate">Start Date</label>
+
+                <div class="col-sm-2">
+                    <input id="fromDate" type="text"  name="fromDate" is-open="opened" min="'2000-01-01'" max="restrictDate" datepicker-pop="dd MMMM yyyy"
+                           ng-model="updateData.fromDate" class="form-control" required late-Validate/>
+                </div>
+                <div class="col-sm-2">
+                    <form-validate valattributeform="editbudgetform" valattribute="froDate"/>
+                </div>
+                <label class="control-label col-sm-2 " for="Create Date">End Date</label>
+
+                <div class="col-sm-2">
+                    <input id="toDate" type="text"  name="toDate" is-open="opened" min="'2000-01-01'"  datepicker-pop="dd MMMM yyyy"
+                           ng-model="updateData.toDate" class="form-control" required late-Validate/>
+                </div>
+                <div class="col-sm-2">
+                    <form-validate valattributeform="editbudgetform" valattribute="toDate"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="disabled">Disabled</label>
+
+                <div class="col-sm-3">
+                    <label class="checkbox">
+                        <input id="disabled" type="checkbox" ng-model="updateData.disabled">
+                    </label>
+                </div>
+                <label class="control-label col-sm-2" for="year">Year</label>
+
+                <div class="col-sm-2">
+                    <input id="year" type="text"  name="year"
+                           ng-model="updateData.year" class="form-control" required late-Validate/>
+                </div>
+                <div class="col-sm-2">
+                    <form-validate valattributeform="editbudgetform" valattribute="year"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="description">{{'label.input.description'| translate}}</label>
+
+                <div class="col-sm-8">
+                    <textarea id="description" name="description" ng-model="updateData.description" rows="4"
+                              cols="" class="form-control"></textarea>
+                </div>
+            </div>
+            
             <div class="col-md-offset-5">
-                <a id="cancel" href="#/viewglaccount/{{glAccountId}}" class="btn btn-default">{{'label.button.cancel' | translate}}</a>
-                <button id="save" type="submit" class="btn btn-primary" has-permission='UPDATE_GLACCOUNT'>{{'label.button.save' | translate}}</button>
+                <a id="cancel" href="#/viewbudget/{{budgetAccountId}}" class="btn btn-default">{{'label.button.cancel'| translate}}</a>
+                <button id="save" type="submit" class="btn btn-primary" has-permission='UPDATE_BUDGET'>{{'label.button.save'| translate}}</button>
             </div>
         </fieldset>
     </form>
