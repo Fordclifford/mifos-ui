@@ -1,0 +1,86 @@
+<div class="content-container" ng-controller="BudgetController">
+    <ul class="breadcrumb">
+        <li><a href="#/accounting">{{'label.anchor.accounting' | translate}}</a></li>
+        <li class="active">Budget</li>
+    </ul>
+    <div class="card">
+        <div class="content">
+            <api-validate></api-validate>
+            <div class="toolbar">
+                <h4>Budget</h4>
+                <div class="pull-right">
+                     <a href="#/createbudget" class="btn btn-primary" has-permission='CREATE_BUDGET'><i class="fa fa-plus "></i>&nbsp;&nbsp;Add budget Item</a>
+                </div>
+            </div>
+            <div>
+                <div class="">
+                    <input ng-model="filterText" type="text" ng-keyup="onFilter()"
+                    class="form-control " placeholder="Filter By Name">
+                </div>
+                <br>
+                <table class="table">
+                    <thead>
+                      <tr class="graybg">
+                        <th>Name</th>
+                        
+                        <th>Created Date</th>
+                         <th>From Date</th>
+                          <th>TO Date</th>
+                          <th>Disabled?</th>
+                           <th>Year</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="pointer-main" dir-paginate="budgetdata in budgetdatas | orderBy:['id']| SearchFilter:filterText |  itemsPerPage: ChartsPerPage">
+                        <td class="pointer" data-ng-click="routeTo(budgetdata.id)">{{budgetdata.name}}</td>
+                      <td class="pointer" data-ng-click="routeTo(budgetdata.id)">{{budgetdata.createDate | DateFormat}}</td>
+                         <td class="pointer" data-ng-click="routeTo(budgetdata.id)">{{budgetdata.fromDate | DateFormat}}</td>
+                          <td class="pointer" data-ng-click="routeTo(budgetdata.id)">{{budgetdata.toDate | DateFormat }}</td>
+                           <td class="pointer" data-ng-click="routeTo(budgetdata.id)">{{budgetdata.disabled}}</td>
+                            <td class="pointer" data-ng-click="routeTo(budgetdata.id)">{{budgetdata.year }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <dir-pagination-controls boundary-links="true" template-url="bower_components/angular-utils-pagination/dirPagination.tpl.html"></dir-pagination-controls>
+            </div>
+<!--            <div ng-show="isTreeView"  >
+                <div ng-show="$root.tempNodeID >= 0" class="col-md-6 divscrollable" >
+                    <table class="table table-bordered table-striped">
+                            <tr>
+                                <td>{{ 'label.heading.glcode' | translate }}</td>
+                                <td ng-repeat="coadata in coadatas" ng-show="coadata.id == $root.tempNodeID">{{coadata.glCode}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'label.heading.acctype' | translate }}</td>
+                                <td ng-repeat="coadata in coadatas" ng-show="coadata.id ==  $root.tempNodeID">{{coadata.type.value}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'label.heading.accountusage' | translate }}</td>
+                                <td ng-repeat="coadata in coadatas" ng-show="coadata.id ==  $root.tempNodeID">{{coadata.usage.value}}</td>
+                            </tr>
+                            <tr>
+                                <td class="width40">{{ 'label.heading.manualentriesallowed' |   translate }}</td>
+                                <td ng-repeat="coadata in coadatas" ng-show="coadata.id ==  $root.tempNodeID">{{coadata.manualEntriesAllowed}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'label.heading.description' | translate }}</td>
+                                <td ng-repeat="coadata in coadatas" ng-show="coadata.id ==  $root.tempNodeID">{{coadata.description}}</td>
+                            </tr>
+                    </table>
+                </div>
+                <div
+                    data-angular-treeview="true"
+                    data-tree-id="treeview"
+                    data-tree-model="treedata"
+                    data-node-id="id"
+                    data-node-label="name"
+                    data-node-children="children"
+                    data-node-glCode="glCode">
+                </div>
+            </div>-->
+            <br>
+            <br>
+            <br><br><br><br><br><br>
+        </div>
+    </div>
+</div>
