@@ -8,8 +8,7 @@
                 }
                 var result = [];
                 for (i = 0; i < list.length; i++) {
-                    if (list[i].name.search(searchRegx) != -1 || 
-                        list[i].glCode.toString().search(searchRegx) != -1 || list[i].type.value.search(searchRegx) != -1 ) {
+                    if (list[i].name.search(searchRegx) != -1 || list[i].glCode.toString().search(searchRegx) != -1 || list[i].type.value.search(searchRegx) != -1 ) {
                         result.push(list[i]);
                     }
                 }
