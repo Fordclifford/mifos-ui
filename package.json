@@ -2,7 +2,7 @@
   "name": "mifosx-community-app",
   "version": "0.0.0",
   "dependencies": {
-    "html-pdf": "^2.2.0"
+    "html-pdf": "^3.0.1"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
